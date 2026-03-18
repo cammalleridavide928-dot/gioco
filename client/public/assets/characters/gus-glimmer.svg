@@ -2,5 +2,5 @@
   <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6c5012"/><stop offset="100%" stop-color="#ffd166"/></linearGradient></defs>
   <rect width="360" height="520" rx="28" fill="url(#g)"/><rect x="18" y="18" width="324" height="484" rx="22" fill="none" stroke="#fff7df" stroke-width="4"/>
   <path d="M84 322c22-72 54-120 96-120 44 0 76 48 96 120" fill="#fff7df"/><circle cx="180" cy="162" r="46" fill="#fff7df"/><path d="M118 136c23-29 86-39 120 13-33-7-65-4-120-13z" fill="#8a6711"/><path d="M86 108l18 24 28-14-8 28 28 8-28 10 9 28-29-15-18 22-3-29-29-7 27-12z" fill="#fff1c0"/>
-  <text x="32" y="58" font-size="18" fill="#fffdf7" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">DISCOUNT CELEB TWIN</text><text x="32" y="458" font-size="34" fill="#fffdf7" font-family="Georgia, serif" font-weight="700">Gus Glimmer</text>
+  <text x="32" y="58" font-size="18" fill="#fffdf7" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">SOSIA LOW-COST VIP</text><text x="32" y="458" font-size="34" fill="#fffdf7" font-family="Georgia, serif" font-weight="700">Gus Glimmer</text>
 </svg>

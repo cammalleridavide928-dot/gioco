@@ -1,17 +1,23 @@
 const rules = {
+  common: [
+    'Si gioca da 3 a 14 persone.',
+    'Il server controlla stanza, voti, timer e punteggi.',
+    'Ogni round dura al massimo 30 secondi.',
+    'Chi si disconnette durante la partita resta al tavolo come assente e puo rientrare.'
+  ],
   classic: [
-    'Everyone secretly votes for another connected player.',
-    'You cannot vote for yourself.',
-    'The round ends when all votes are in or the timer expires.',
-    'Every tied top-voted player gets 1 point.',
-    'Classic mode lasts for the configured number of rounds.'
+    'Tutti votano in segreto un altro giocatore connesso.',
+    'Non puoi votare te stesso.',
+    'Il round finisce quando arrivano tutti i voti oppure scade il timer.',
+    'Ogni giocatore a pari merito in testa prende 1 punto.',
+    'La modalita Classica dura per il numero di round scelto dall host.'
   ],
   dictator: [
-    'One player becomes the dictator each round in seat order.',
-    'Only non-dictator players vote secretly.',
-    'After the reveal, the dictator picks any connected player except themselves.',
-    'The chosen target gets 1 point.',
-    'The dictator gets 1 bonus point only if the final pick matches the crowd’s top-voted set.'
+    'Ogni round un giocatore diverso diventa il Dittatore seguendo l ordine dei posti.',
+    'Solo i non-dittatori votano in segreto.',
+    'Dopo la rivelazione, il Dittatore sceglie un giocatore connesso diverso da se stesso.',
+    'Il bersaglio scelto prende 1 punto.',
+    'Il Dittatore prende 1 punto bonus solo se la sua scelta coincide con il gruppo dei piu votati.'
   ]
 };
 
@@ -25,19 +31,25 @@ export default function RulesModal({ open, onClose }) {
       <div className="modal-panel panel" onClick={(event) => event.stopPropagation()}>
         <div className="modal-header">
           <div>
-            <p className="eyebrow">Rules</p>
-            <h3>How Spotlight Suspects works</h3>
+            <p className="eyebrow">Regole</p>
+            <h3>Come si gioca a Spotlight Suspects</h3>
           </div>
-          <button type="button" className="ghost-button" onClick={onClose}>Close</button>
+          <button type="button" className="ghost-button" onClick={onClose}>Chiudi</button>
         </div>
         <section>
-          <h4>Classic Mode</h4>
+          <h4>Info rapide</h4>
+          <ul>
+            {rules.common.map((rule) => <li key={rule}>{rule}</li>)}
+          </ul>
+        </section>
+        <section>
+          <h4>Modalita Classica</h4>
           <ul>
             {rules.classic.map((rule) => <li key={rule}>{rule}</li>)}
           </ul>
         </section>
         <section>
-          <h4>Dictator Mode</h4>
+          <h4>Modalita Dittatore</h4>
           <ul>
             {rules.dictator.map((rule) => <li key={rule}>{rule}</li>)}
           </ul>

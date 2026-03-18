@@ -2,5 +2,5 @@
   <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#603313"/><stop offset="100%" stop-color="#ffb347"/></linearGradient></defs>
   <rect width="360" height="520" rx="28" fill="url(#g)"/><rect x="18" y="18" width="324" height="484" rx="22" fill="none" stroke="#fff6e6" stroke-width="4"/>
   <path d="M84 324c20-74 54-118 96-118 44 0 76 44 96 118" fill="#fff6e6"/><circle cx="180" cy="166" r="48" fill="#fff6e6"/><path d="M117 146c10-41 48-58 92-58 34 0 56 21 61 55-28-11-57-16-86-11-24 4-44 9-67 14z" fill="#825019"/><path d="M274 84l8 22 22 8-22 8-8 22-8-22-22-8 22-8z" fill="#fff0c5"/>
-  <text x="32" y="58" font-size="18" fill="#fffdf9" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">FESTIVAL DARE CAPTAIN</text><text x="32" y="458" font-size="34" fill="#fffdf9" font-family="Georgia, serif" font-weight="700">Suki Spark</text>
+  <text x="32" y="58" font-size="18" fill="#fffdf9" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">CAPITANA DELLE SFIDE</text><text x="32" y="458" font-size="34" fill="#fffdf9" font-family="Georgia, serif" font-weight="700">Suki Spark</text>
 </svg>

@@ -1,7 +1,10 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const storagePath = path.resolve(process.cwd(), 'server/src/persistence/storage.json');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const storagePath = path.resolve(__dirname, 'storage.json');
 
 const initialState = {
   wins: {},

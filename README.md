@@ -4,15 +4,17 @@ Spotlight Suspects is a local-first real-time party card game for the browser. O
 
 ## Features
 
-- Real-time multiplayer rooms for up to 14 players
+- Real-time multiplayer rooms with a minimum of 3 players to start and a maximum of 14 players per room
 - Create and join flow with shareable room codes and reconnect support
+- Fully localized Italian in-game experience for UI, rules, prompts, and player feedback
 - Two complete game modes: Classic and Dictator
 - Server-authoritative game state with Socket.IO
 - Secret voting, reveal phase, scoreboard, round timer, and rematch flow
 - Persistent all-time wins leaderboard stored in JSON on the server
 - 14 generated placeholder character cards as editable SVG assets
-- 64 editable prompt cards in JSON
+- 64 editable prompt cards in JSON, now localized in Italian
 - Responsive React + Vite interface with card animations and optional procedural sounds
+- Render-ready single-service deployment, with Express serving the built client in production
 
 ## Tech Stack
 
@@ -26,21 +28,21 @@ Spotlight Suspects is a local-first real-time party card game for the browser. O
 
 ```text
 .
-├── client
-│   ├── public/assets
-│   │   ├── characters
-│   │   └── card-back.svg
-│   └── src
-│       ├── components
-│       ├── hooks
-│       └── styles
-├── server
-│   └── src
-│       ├── data
-│       ├── lib
-│       ├── persistence
-│       └── state
-└── package.json
+|-- client
+|   |-- public/assets
+|   |   |-- characters
+|   |   `-- card-back.svg
+|   `-- src
+|       |-- components
+|       |-- hooks
+|       `-- styles
+|-- server
+|   `-- src
+|       |-- data
+|       |-- lib
+|       |-- persistence
+|       `-- state
+`-- package.json
 ```
 
 ## Installation
@@ -68,6 +70,15 @@ npm run build
 
 The client runs on `http://localhost:5173` and the server runs on `http://localhost:3001`.
 
+## Render Deployment
+
+This repository supports Render as a single full-stack service:
+
+- Build command: `npm install && npm run build`
+- Start command: `npm run start`
+
+In production, Express serves the built frontend from `client/dist` while preserving `/api/*` routes and Socket.IO.
+
 ## How Room Creation Works
 
 1. A player enters a display name, picks a character card, and creates a room.
@@ -75,6 +86,8 @@ The client runs on `http://localhost:5173` and the server runs on `http://localh
 3. Other players join with the room code or a shareable URL containing `?room=CODE`.
 4. The server keeps the room state authoritative and broadcasts updates in real time.
 5. A reconnect token is stored in browser local storage so a player can recover their seat after a refresh.
+6. A game can only start with at least 3 connected players.
+7. A room accepts at most 14 players.
 
 ## Game Modes
 
@@ -95,13 +108,13 @@ The client runs on `http://localhost:5173` and the server runs on `http://localh
 - After voting ends, the table sees the full vote reveal and the top-voted crowd set.
 - The dictator then chooses any connected player except themselves.
 - The chosen target gains 1 point.
-- The dictator gains 1 bonus point only if their final pick belongs to the crowd’s top-voted set.
+- The dictator gains 1 bonus point only if their final pick belongs to the crowd's top-voted set.
 - If the scheduled dictator is disconnected when their turn arrives, the server skips their round and moves to the next available dictator.
 - The game ends after every starting player has had a dictator slot considered once.
 
 ## Rules Modal
 
-The client includes an in-game rules modal that mirrors the scoring rules above so players can quickly learn both modes at the table.
+The client includes an in-game rules modal in Italian that mirrors the scoring rules above and clearly states the 3-player minimum and 14-player maximum.
 
 ## Customizing Characters
 
@@ -118,7 +131,7 @@ Edit:
 
 - Prompt deck: [server/src/data/prompts.json](/c:/Users/camma/Desktop/gioco/server/src/data/prompts.json)
 
-The backend shuffles the deck, avoids repeats until exhaustion, and then reshuffles automatically.
+The default deck is localized in Italian. The backend shuffles the deck, avoids repeats until exhaustion, and then reshuffles automatically.
 
 ## Persistence
 
@@ -139,6 +152,8 @@ The file is created automatically on first run.
 - Room code format: 5 uppercase letters
 - Persistence method: JSON file storage for zero-setup local use
 - Reconnect policy: browser session token restores a player seat if the same room is rejoined
+- Minimum players to start: 3 connected players
+- Maximum room size: 14 players
 - Classic tie rule: every tied top-voted player gets 1 point
 - Dictator scoring: target always gets 1 point, dictator gets 1 bonus point only for matching the top crowd set
 - Client preference persistence: mute state and reconnect session are stored in local storage
@@ -148,5 +163,4 @@ The file is created automatically on first run.
 - Add private host controls for custom timers and tie rules
 - Add spectator mode and stronger reconnect recovery
 - Add richer sound packs and alternate board themes
-- Add deployment config for remote play
 - Add analytics and per-room history browsing

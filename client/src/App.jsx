@@ -34,7 +34,7 @@ export default function App() {
     fetch('/api/bootstrap')
       .then((response) => response.json())
       .then((data) => setBootstrap(data))
-      .catch(() => setError('Failed to load game data.'));
+      .catch(() => setError('Impossibile caricare i dati del gioco.'));
   }, []);
 
   useEffect(() => {
@@ -89,15 +89,15 @@ export default function App() {
 
   function validateDraft(needsRoomCode = false) {
     if (!draft.displayName.trim()) {
-      setError('Please enter a display name.');
+      setError('Inserisci un nome giocatore.');
       return false;
     }
     if (!draft.characterId) {
-      setError('Please choose a character card.');
+      setError('Scegli una carta personaggio.');
       return false;
     }
     if (needsRoomCode && !draft.roomCode.trim()) {
-      setError('Enter a room code to join.');
+      setError('Inserisci un codice stanza per entrare.');
       return false;
     }
     return true;
@@ -198,14 +198,14 @@ export default function App() {
   async function copyInvite(text) {
     try {
       await navigator.clipboard.writeText(text);
-      setError('Invite link copied to clipboard.');
+      setError('Link di invito copiato negli appunti.');
     } catch {
-      setError('Copy failed. Share the room code manually.');
+      setError('Copia non riuscita. Condividi il codice stanza manualmente.');
     }
   }
 
   if (!bootstrap) {
-    return <div className="loading-screen">Loading Spotlight Suspects...</div>;
+    return <div className="loading-screen">Caricamento di Spotlight Suspects...</div>;
   }
 
   return (

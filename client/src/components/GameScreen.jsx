@@ -17,9 +17,9 @@ function PlayerToken({ player, character, isSelf, isDictator, isTopTarget, isSel
       </div>
       <div className="player-token-meta">
         <b>{player.score}</b>
-        <small>pts</small>
+        <small>pt</small>
       </div>
-      {isDictator ? <span className="dictator-crown">Crown</span> : null}
+      {isDictator ? <span className="dictator-crown">Corona</span> : null}
     </article>
   );
 }
@@ -37,28 +37,28 @@ function VoteTray({
   const selfVote = room.game.selfVote;
   const isDictator = room.game.dictatorPlayerId === selfPlayer.id;
 
-  let title = 'Waiting';
-  let helper = 'Hold tight while the table catches up.';
+  let title = 'In attesa';
+  let helper = 'Aspetta un attimo: il tavolo sta ancora completando il round.';
   let action = onVote;
 
   if (isVoting && !isDictator) {
-    title = selfVote ? 'Vote submitted' : 'Cast your secret vote';
-    helper = selfVote ? 'Your vote is locked until the reveal.' : 'Choose the player that best fits the prompt.';
+    title = selfVote ? 'Voto inviato' : 'Esprimi il tuo voto segreto';
+    helper = selfVote ? 'Il tuo voto e bloccato fino alla rivelazione.' : 'Scegli il giocatore che si adatta meglio alla carta prompt.';
   }
 
   if (isVoting && isDictator) {
-    title = 'You are the dictator';
-    helper = 'Sit back during voting. You choose after the votes are revealed.';
+    title = 'Sei il Dittatore';
+    helper = 'Per ora osserva il tavolo: sceglierai dopo la rivelazione dei voti.';
   }
 
   if (isDictatorChoice) {
     if (isDictator) {
-      title = 'Make the final call';
-      helper = 'Pick any player except yourself. Crowd favorites glow gold.';
+      title = 'Fai la scelta finale';
+      helper = 'Scegli un giocatore diverso da te. I preferiti del gruppo brillano in oro.';
       action = onDictatorChoice;
     } else {
-      title = 'Dictator deciding';
-      helper = 'The dictator is choosing the final spotlight target.';
+      title = 'Il Dittatore sta decidendo';
+      helper = 'La scelta finale del bersaglio e in corso.';
     }
   }
 
@@ -66,7 +66,7 @@ function VoteTray({
     <section className="vote-tray panel">
       <div className="panel-header">
         <div>
-          <p className="eyebrow">Your Area</p>
+          <p className="eyebrow">La tua area</p>
           <h3>{title}</h3>
         </div>
         <span>{helper}</span>
@@ -109,14 +109,14 @@ function RevealPanel({ room }) {
     <section className="reveal-panel panel">
       <div className="panel-header">
         <div>
-          <p className="eyebrow">Reveal</p>
-          <h3>{reveal.headline || 'Votes revealed'}</h3>
+          <p className="eyebrow">Rivelazione</p>
+          <h3>{reveal.headline || 'Voti rivelati'}</h3>
         </div>
         <span>{reveal.subline}</span>
       </div>
       <div className="reveal-grid">
         <div>
-          <h4>Votes</h4>
+          <h4>Voti</h4>
           <div className="vote-list">
             {reveal.votes?.map((vote) => (
               <div className="vote-row" key={`${vote.voterId}-${vote.targetId}`}>
@@ -127,7 +127,7 @@ function RevealPanel({ room }) {
           </div>
         </div>
         <div>
-          <h4>Standings</h4>
+          <h4>Classifica</h4>
           <div className="score-list">
             {reveal.scoreboard?.map((player) => (
               <div className="score-row" key={player.id}>
@@ -150,14 +150,14 @@ function FinalResults({ room, charactersById, selfPlayer, onRestart, onLeave }) 
       <div className="final-card panel">
         <div className="panel-header">
           <div>
-            <p className="eyebrow">Game Over</p>
+            <p className="eyebrow">Partita finita</p>
             <h2>{room.game.reveal?.headline}</h2>
           </div>
-          <span>{room.game.mode === 'classic' ? 'Classic complete' : 'Dictator cycle complete'}</span>
+          <span>{room.game.mode === 'classic' ? 'Modalita Classica conclusa' : 'Giro Dittatore completato'}</span>
         </div>
         <div className="final-columns">
           <div>
-            <h3>Final ranking</h3>
+            <h3>Classifica finale</h3>
             <div className="final-ranking">
               {ranking.map((player) => (
                 <div key={player.id} className="final-row">
@@ -169,7 +169,7 @@ function FinalResults({ room, charactersById, selfPlayer, onRestart, onLeave }) 
             </div>
           </div>
           <div>
-            <h3>All-time wins</h3>
+            <h3>Vittorie di sempre</h3>
             <div className="final-ranking">
               {leaderboard.slice(0, 6).map((entry) => (
                 <div key={entry.name} className="final-row compact">
@@ -181,12 +181,22 @@ function FinalResults({ room, charactersById, selfPlayer, onRestart, onLeave }) 
           </div>
         </div>
         <div className="cta-row">
-          {selfPlayer?.isHost ? <button type="button" className="primary-button" onClick={onRestart}>Back to Lobby</button> : null}
-          <button type="button" className="secondary-button" onClick={onLeave}>Leave Room</button>
+          {selfPlayer?.isHost ? <button type="button" className="primary-button" onClick={onRestart}>Torna alla lobby</button> : null}
+          <button type="button" className="secondary-button" onClick={onLeave}>Esci dalla stanza</button>
         </div>
       </div>
     </section>
   );
+}
+
+function formatPhaseLabel(phase) {
+  const labels = {
+    voting: 'votazione',
+    dictator_choice: 'scelta del dittatore',
+    reveal: 'rivelazione',
+    game_over: 'partita finita'
+  };
+  return labels[phase] || phase;
 }
 
 export default function GameScreen({
@@ -209,8 +219,8 @@ export default function GameScreen({
     <main className="game-shell">
       <header className="game-topbar">
         <div>
-          <p className="eyebrow">{room.game.mode === 'classic' ? 'Classic Mode' : 'Dictator Mode'}</p>
-          <h1>Room {room.roomCode}</h1>
+          <p className="eyebrow">{room.game.mode === 'classic' ? 'Modalita Classica' : 'Modalita Dittatore'}</p>
+          <h1>Stanza {room.roomCode}</h1>
         </div>
         <div className="game-stats">
           <div className="stat-chip">
@@ -221,9 +231,9 @@ export default function GameScreen({
             <span>Timer</span>
             <strong>{room.game.timerRemaining}s</strong>
           </div>
-          <button type="button" className="ghost-button" onClick={onOpenRules}>Rules</button>
-          <button type="button" className="ghost-button" onClick={() => setMuted(!muted)}>{muted ? 'Unmute' : 'Mute'}</button>
-          <button type="button" className="ghost-button" onClick={onLeave}>Leave</button>
+          <button type="button" className="ghost-button" onClick={onOpenRules}>Regole</button>
+          <button type="button" className="ghost-button" onClick={() => setMuted(!muted)}>{muted ? 'Attiva audio' : 'Disattiva audio'}</button>
+          <button type="button" className="ghost-button" onClick={onLeave}>Esci</button>
         </div>
       </header>
 
@@ -231,10 +241,10 @@ export default function GameScreen({
         <aside className="panel side-panel">
           <div className="panel-header">
             <div>
-              <p className="eyebrow">Scoreboard</p>
-              <h3>Current ranking</h3>
+              <p className="eyebrow">Punteggi</p>
+              <h3>Classifica attuale</h3>
             </div>
-            <span>{dictator ? `Dictator: ${dictator.displayName}` : 'Secret votes live'}</span>
+            <span>{dictator ? `Dittatore: ${dictator.displayName}` : 'I voti restano segreti'}</span>
           </div>
           <div className="score-list">
             {room.players.map((player, index) => (
@@ -249,14 +259,14 @@ export default function GameScreen({
         <section className="center-table panel">
           <div className={`prompt-card ${room.game.phase}`}>
             <div className="prompt-face prompt-back">
-              <img src="/assets/card-back.svg" alt="Card back" />
+              <img src="/assets/card-back.svg" alt="Retro della carta" />
             </div>
             <div className="prompt-face prompt-front">
-              <p className="eyebrow">Prompt Card</p>
+              <p className="eyebrow">Carta prompt</p>
               <h2>{room.game.prompt}</h2>
               <div className="prompt-meta">
-                <span>{room.game.phase.replace('_', ' ')}</span>
-                {dictator ? <strong>{dictator.displayName} wears the crown</strong> : null}
+                <span>{formatPhaseLabel(room.game.phase)}</span>
+                {dictator ? <strong>{dictator.displayName} ha la corona</strong> : null}
               </div>
             </div>
           </div>
@@ -278,15 +288,15 @@ export default function GameScreen({
         <aside className="panel side-panel">
           <div className="panel-header">
             <div>
-              <p className="eyebrow">Round Info</p>
-              <h3>State machine</h3>
+              <p className="eyebrow">Stato round</p>
+              <h3>Panoramica</h3>
             </div>
-            <span>{room.game.phase.replace('_', ' ')}</span>
+            <span>{formatPhaseLabel(room.game.phase)}</span>
           </div>
           <ul className="status-list">
-            <li>{room.game.phase === 'voting' ? 'Votes are hidden until reveal.' : 'The server has frozen the votes.'}</li>
-            <li>{room.game.mode === 'classic' ? 'Top-voted players all earn points.' : 'The dictator can steal a bonus by matching the crowd.'}</li>
-            <li>{room.players.filter((player) => player.hasVoted).length} players have locked their vote.</li>
+            <li>{room.game.phase === 'voting' ? 'I voti restano nascosti fino alla rivelazione.' : 'Il server ha bloccato i voti di questo round.'}</li>
+            <li>{room.game.mode === 'classic' ? 'Tutti i piu votati prendono 1 punto.' : 'Il Dittatore puo guadagnare un bonus se indovina il gruppo in testa.'}</li>
+            <li>{room.players.filter((player) => player.hasVoted).length} giocatori hanno gia bloccato il voto.</li>
           </ul>
         </aside>
       </section>

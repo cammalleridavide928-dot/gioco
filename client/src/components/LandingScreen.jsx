@@ -12,23 +12,23 @@ export default function LandingScreen({
     <main className="landing-shell">
       <section className="hero-panel">
         <div className="hero-copy">
-          <p className="eyebrow">Party Card Game</p>
+          <p className="eyebrow">Party Game Online</p>
           <h1>Spotlight Suspects</h1>
           <p className="lede">
-            A live browser game of outrageous accusations, secret voting, and suspiciously dramatic character cards.
+            Un party game da browser con accuse assurde, voti segreti e personaggi abbastanza teatrali da creare subito il caos.
           </p>
           <div className="hero-pills">
-            <span>Up to 14 players</span>
-            <span>Classic + Dictator</span>
-            <span>30 second rounds</span>
+            <span>Da 3 a 14 giocatori</span>
+            <span>Classica + Dittatore</span>
+            <span>Round da 30 secondi</span>
           </div>
         </div>
         <div className="card-showcase">
-          <img src="/assets/card-back.svg" alt="Card back" className="showcase-back" />
+          <img src="/assets/card-back.svg" alt="Retro della carta" className="showcase-back" />
           {draft.characterId ? (
             <img
               src={bootstrap.characters.find((character) => character.id === draft.characterId)?.asset}
-              alt="Selected character"
+              alt="Personaggio selezionato"
               className="showcase-front"
             />
           ) : null}
@@ -38,24 +38,24 @@ export default function LandingScreen({
       <section className="entry-panel">
         <div className="entry-header">
           <div>
-            <p className="eyebrow">Create or Join</p>
-            <h2>Claim your seat</h2>
+            <p className="eyebrow">Crea o Entra</p>
+            <h2>Prenota il tuo posto</h2>
           </div>
-          <p>Pick a display name, lock in a character card, then open a room or join one with a shared code.</p>
+          <p>Scegli un nome, blocca il tuo personaggio e apri una stanza oppure entra con un codice condiviso.</p>
         </div>
 
         <div className="form-grid">
           <label>
-            <span>Display name</span>
+            <span>Nome giocatore</span>
             <input
               value={draft.displayName}
               maxLength={20}
-              placeholder="Enter your game name"
+              placeholder="Inserisci il tuo nome di gioco"
               onChange={(event) => setDraft((current) => ({ ...current, displayName: event.target.value }))}
             />
           </label>
           <label>
-            <span>Room code</span>
+            <span>Codice stanza</span>
             <input
               value={draft.roomCode}
               maxLength={5}
@@ -77,22 +77,22 @@ export default function LandingScreen({
         {error ? <p className="error-banner">{error}</p> : null}
 
         <div className="cta-row">
-          <button type="button" className="primary-button" onClick={onCreate}>Create Room</button>
-          <button type="button" className="secondary-button" onClick={onJoin}>Join Room</button>
+          <button type="button" className="primary-button" onClick={onCreate}>Crea stanza</button>
+          <button type="button" className="secondary-button" onClick={onJoin}>Entra nella stanza</button>
         </div>
 
         <div className="leaderboard-card">
           <div>
-            <p className="eyebrow">All-time winners</p>
-            <h3>Local leaderboard</h3>
+            <p className="eyebrow">Vittorie di sempre</p>
+            <h3>Classifica locale</h3>
           </div>
           <ol>
             {bootstrap.leaderboard.length ? bootstrap.leaderboard.slice(0, 5).map((entry) => (
               <li key={entry.name}>
                 <span>{entry.name}</span>
-                <strong>{entry.wins} wins</strong>
+                <strong>{entry.wins} vittorie</strong>
               </li>
-            )) : <li><span>No wins yet</span><strong>Be the first</strong></li>}
+            )) : <li><span>Nessuna vittoria registrata</span><strong>Inizia tu</strong></li>}
           </ol>
         </div>
       </section>

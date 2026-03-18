@@ -2,5 +2,5 @@
   <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#263d63"/><stop offset="100%" stop-color="#86b7ff"/></linearGradient></defs>
   <rect width="360" height="520" rx="28" fill="url(#g)"/><rect x="18" y="18" width="324" height="484" rx="22" fill="none" stroke="#eef4ff" stroke-width="4"/>
   <path d="M82 324c22-74 54-118 98-118 43 0 76 43 98 118" fill="#eef4ff"/><circle cx="180" cy="166" r="48" fill="#eef4ff"/><path d="M116 144c12-37 44-58 90-58 32 0 58 21 61 55-26-13-57-18-87-14-25 3-40 11-64 17z" fill="#3d5f98"/><circle cx="88" cy="92" r="24" fill="#dbe7ff"/><circle cx="114" cy="90" r="20" fill="#dbe7ff"/><circle cx="136" cy="98" r="16" fill="#dbe7ff"/>
-  <text x="32" y="58" font-size="18" fill="#f8faff" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">CLOUD MOOD INFLUENCER</text><text x="32" y="458" font-size="34" fill="#f8faff" font-family="Georgia, serif" font-weight="700">Nina Nimbus</text>
+  <text x="32" y="58" font-size="18" fill="#f8faff" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">INFLUENCER NUVOLOSA</text><text x="32" y="458" font-size="34" fill="#f8faff" font-family="Georgia, serif" font-weight="700">Nina Nimbus</text>
 </svg>

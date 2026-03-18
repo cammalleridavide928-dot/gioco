@@ -35,6 +35,7 @@ export class RoomManager {
     return {
       gameTitle: 'Spotlight Suspects',
       maxPlayers: MAX_PLAYERS,
+      minPlayers: MIN_PLAYERS,
       defaultClassicRounds: DEFAULT_CLASSIC_ROUNDS,
       turnSeconds: TURN_SECONDS,
       characters,
@@ -71,7 +72,7 @@ export class RoomManager {
     const roomCode = (payload.roomCode || '').toUpperCase().trim();
     const room = this.rooms.get(roomCode);
     if (!room) {
-      throw new Error('Room not found.');
+      throw new Error('Stanza non trovata.');
     }
     const player = this.addOrReconnectPlayer(room, socket, payload, false);
     socket.join(roomCode);
@@ -94,22 +95,25 @@ export class RoomManager {
     }
 
     if (!displayName) {
-      throw new Error('Display name is required.');
+      throw new Error('Inserisci un nome giocatore.');
     }
     if (!characterMap.has(characterId)) {
-      throw new Error('Please choose a character card.');
+      throw new Error('Scegli una carta personaggio.');
+    }
+    if (room.game && room.game.status !== 'game_over') {
+      throw new Error('La partita e gia iniziata. Puoi rientrare solo con la tua sessione.');
     }
     if (!room.players.find((player) => player.id === room.hostId) && room.players.length) {
       room.hostId = room.players[0].id;
       room.players[0].isHost = true;
     }
     if (room.players.length >= MAX_PLAYERS) {
-      throw new Error('This room is full.');
+      throw new Error('La stanza e piena. Il massimo e 14 giocatori.');
     }
     if (room.game && room.game.status !== 'game_over') {
       const duplicateName = room.players.find((player) => player.displayName.toLowerCase() === displayName.toLowerCase());
       if (duplicateName) {
-        throw new Error('That display name is already in use in this active game.');
+        throw new Error('Questo nome giocatore e gia in uso nella partita attiva.');
       }
     }
 
@@ -137,7 +141,7 @@ export class RoomManager {
     const room = this.requireRoomForSocket(socket);
     this.requireHost(room, socket.data.playerId);
     if (room.game) {
-      throw new Error('Settings can only be changed in the lobby.');
+      throw new Error('Le impostazioni si possono cambiare solo nella lobby.');
     }
     room.settings.mode = payload.mode === 'dictator' ? 'dictator' : 'classic';
     room.settings.classicRounds = clamp(Number(payload.classicRounds) || DEFAULT_CLASSIC_ROUNDS, 3, 20);
@@ -148,7 +152,7 @@ export class RoomManager {
     const room = this.requireRoomForSocket(socket);
     this.requireHost(room, socket.data.playerId);
     if (room.game) {
-      throw new Error('Players can only be kicked before the game starts.');
+      throw new Error('Puoi espellere giocatori solo prima dell inizio della partita.');
     }
     room.players = room.players.filter((player) => player.id !== targetId);
     this.reassignSeats(room);
@@ -161,7 +165,7 @@ export class RoomManager {
     this.requireHost(room, socket.data.playerId);
     const connectedPlayers = room.players.filter((player) => player.connected);
     if (connectedPlayers.length < MIN_PLAYERS) {
-      throw new Error(`At least ${MIN_PLAYERS} connected players are required.`);
+      throw new Error(`Servono almeno ${MIN_PLAYERS} giocatori connessi per iniziare.`);
     }
     room.players.forEach((player) => {
       player.score = 0;
@@ -193,21 +197,21 @@ export class RoomManager {
     const playerId = socket.data.playerId;
     const game = room.game;
     if (!game || game.status !== 'in_progress' || game.phase !== 'voting') {
-      throw new Error('Voting is not open right now.');
+      throw new Error('La votazione non e aperta in questo momento.');
     }
     const voter = room.players.find((player) => player.id === playerId);
     if (!voter?.connected) {
-      throw new Error('Disconnected players cannot vote.');
+      throw new Error('I giocatori disconnessi non possono votare.');
     }
     if (!this.getEligibleVoters(room).includes(playerId)) {
-      throw new Error('You are not eligible to vote this round.');
+      throw new Error('Non puoi votare in questo round.');
     }
     if (playerId === targetId) {
-      throw new Error('You cannot vote for yourself.');
+      throw new Error('Non puoi votare te stesso.');
     }
     const validTargets = this.getEligibleTargets(room, playerId);
     if (!validTargets.includes(targetId)) {
-      throw new Error('That vote target is not available.');
+      throw new Error('Questo bersaglio non e disponibile.');
     }
     game.votes[playerId] = targetId;
     this.broadcastRoom(room);
@@ -220,14 +224,14 @@ export class RoomManager {
     const room = this.requireRoomForSocket(socket);
     const game = room.game;
     if (!game || game.phase !== 'dictator_choice') {
-      throw new Error('The dictator is not choosing right now.');
+      throw new Error('Il Dittatore non sta scegliendo in questo momento.');
     }
     if (socket.data.playerId !== game.dictatorPlayerId) {
-      throw new Error('Only the dictator can make this choice.');
+      throw new Error('Solo il Dittatore puo fare questa scelta.');
     }
     const validTargets = this.getEligibleTargets(room, game.dictatorPlayerId);
     if (!validTargets.includes(targetId)) {
-      throw new Error('That choice is not available.');
+      throw new Error('Questa scelta non e disponibile.');
     }
     game.dictatorChoice = targetId;
     const target = room.players.find((player) => player.id === targetId);
@@ -249,10 +253,10 @@ export class RoomManager {
       scoreboard: this.buildRanking(room)
     };
     this.enterReveal(room, {
-      headline: `${target?.displayName || 'No one'} is in the spotlight.`,
+      headline: `${target?.displayName || 'Nessuno'} finisce sotto i riflettori.`,
       subline: game.topTargets.includes(targetId)
-        ? `${dictator?.displayName || 'The dictator'} matched the crowd and earns a bonus point.`
-        : `${dictator?.displayName || 'The dictator'} missed the crowd bonus.`
+        ? `${dictator?.displayName || 'Il Dittatore'} ha indovinato il gruppo di testa e prende un punto bonus.`
+        : `${dictator?.displayName || 'Il Dittatore'} non ha centrato il bonus del gruppo.`
     });
   }
 
@@ -320,14 +324,14 @@ export class RoomManager {
     const roomCode = socket.data?.roomCode;
     const room = roomCode ? this.rooms.get(roomCode) : null;
     if (!room) {
-      throw new Error('Room not found.');
+      throw new Error('Stanza non trovata.');
     }
     return room;
   }
 
   requireHost(room, playerId) {
     if (room.hostId !== playerId) {
-      throw new Error('Only the host can do that.');
+      throw new Error('Solo l host puo farlo.');
     }
   }
 
@@ -433,7 +437,7 @@ export class RoomManager {
       game.discardPile.push(prompt);
       game.promptHistory.push(prompt);
     }
-    return prompt || 'Who is most likely to become the story everyone repeats tomorrow?';
+    return prompt || 'Chi e piu probabile che diventi la storia che tutti racconteranno domani?';
   }
 
   resolveVoting(room) {
@@ -461,8 +465,8 @@ export class RoomManager {
         .map((playerId) => room.players.find((player) => player.id === playerId)?.displayName)
         .filter(Boolean);
       this.enterReveal(room, {
-        headline: winners.length ? `${winners.join(' & ')} take the point.` : 'No points awarded.',
-        subline: winners.length > 1 ? 'Classic mode rewards every tied leader.' : 'The votes are locked in.'
+        headline: winners.length ? `${winners.join(' e ')} prendono il punto.` : 'Nessun punto assegnato.',
+        subline: winners.length > 1 ? 'In Classica ogni leader a pari merito guadagna 1 punto.' : 'I voti sono stati bloccati.'
       });
       return;
     }
@@ -480,8 +484,8 @@ export class RoomManager {
     const automaticTarget = game.topTargets[0] || this.getEligibleTargets(room, game.dictatorPlayerId)[0];
     if (!automaticTarget) {
       this.enterReveal(room, {
-        headline: 'Nobody was available for the final call.',
-        subline: 'The round moves on without extra points.'
+        headline: 'Nessuno era disponibile per la scelta finale.',
+        subline: 'Il round prosegue senza punti extra.'
       });
       return;
     }
@@ -515,8 +519,8 @@ export class RoomManager {
     game.phase = 'game_over';
     const ranking = this.buildRanking(room);
     game.reveal = {
-      headline: `${ranking[0]?.displayName || 'The table'} wins the game.`,
-      subline: 'Final results are locked in.',
+      headline: `${ranking[0]?.displayName || 'Il tavolo'} vince la partita.`,
+      subline: 'I risultati finali sono confermati.',
       scoreboard: ranking
     };
     const publicResult = {
@@ -547,9 +551,9 @@ export class RoomManager {
   expandVoteDetails(room) {
     return Object.entries(room.game?.votes || {}).map(([voterId, targetId]) => ({
       voterId,
-      voterName: room.players.find((player) => player.id === voterId)?.displayName || 'Unknown',
+      voterName: room.players.find((player) => player.id === voterId)?.displayName || 'Sconosciuto',
       targetId,
-      targetName: room.players.find((player) => player.id === targetId)?.displayName || 'Nobody'
+      targetName: room.players.find((player) => player.id === targetId)?.displayName || 'Nessuno'
     }));
   }
 
