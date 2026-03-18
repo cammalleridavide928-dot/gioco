@@ -89,7 +89,13 @@ export default function App() {
 
   function emit(eventName, payload) {
     return new Promise((resolve) => {
-      socketRef.current.emit(eventName, payload, resolve);
+      const timeoutId = window.setTimeout(() => {
+        resolve({ ok: false, error: 'Il server non ha risposto in tempo. Riprova.' });
+      }, 8000);
+      socketRef.current.emit(eventName, payload, (response) => {
+        window.clearTimeout(timeoutId);
+        resolve(response);
+      });
     });
   }
 
@@ -135,7 +141,7 @@ export default function App() {
       return;
     }
     const result = await emit('player:join', {
-      roomCode: draft.roomCode,
+      roomCode: draft.roomCode.trim().toUpperCase(),
       displayName: draft.displayName.trim(),
       characterId: draft.characterId,
       sessionId: session?.sessionId

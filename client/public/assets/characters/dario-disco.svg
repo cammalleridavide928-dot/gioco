@@ -2,5 +2,5 @@
   <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#16372e"/><stop offset="100%" stop-color="#4ddc9b"/></linearGradient></defs>
   <rect width="360" height="520" rx="28" fill="url(#g)"/><rect x="18" y="18" width="324" height="484" rx="22" fill="none" stroke="#effff7" stroke-width="4"/>
   <path d="M82 324c20-72 56-120 98-120 44 0 78 47 98 120" fill="#effff7"/><circle cx="180" cy="164" r="46" fill="#effff7"/><path d="M118 142c11-37 44-58 85-58 35 0 61 21 65 61-27-12-56-16-85-12-26 3-42 7-65 9z" fill="#215444"/><circle cx="282" cy="92" r="28" fill="#c7ffe4"/><rect x="270" y="120" width="24" height="58" rx="12" fill="#c7ffe4"/>
-  <text x="32" y="58" font-size="18" fill="#fbfffd" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">PROFETA DEL DISCO</text><text x="32" y="458" font-size="34" fill="#fbfffd" font-family="Georgia, serif" font-weight="700">Dario Disco</text>
+  <text x="32" y="58" font-size="18" fill="#fbfffd" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">DOMATORE DI DRAGHI</text><text x="32" y="458" font-size="34" fill="#fbfffd" font-family="Georgia, serif" font-weight="700">Rowan Flint</text>
 </svg>

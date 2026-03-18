@@ -2,5 +2,5 @@
   <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#12364f"/><stop offset="100%" stop-color="#6ad5ff"/></linearGradient></defs>
   <rect width="360" height="520" rx="28" fill="url(#g)"/><rect x="18" y="18" width="324" height="484" rx="22" fill="none" stroke="#eefcff" stroke-width="4"/>
   <path d="M84 324c22-72 53-118 96-118 45 0 76 44 96 118" fill="#eefcff"/><circle cx="180" cy="166" r="48" fill="#eefcff"/><path d="M107 150c11-41 47-63 93-57 35 4 56 26 60 56-28-10-58-13-86-8-26 5-43 10-67 9z" fill="#235b7e"/><path d="M72 98c29-18 62-22 98-12-22 14-36 33-41 57z" fill="#cbf2ff"/>
-  <text x="32" y="58" font-size="18" fill="#f8fdff" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">PREVISIONI DI GUAI</text><text x="32" y="458" font-size="34" fill="#f8fdff" font-family="Georgia, serif" font-weight="700">Tess Tempest</text>
+  <text x="32" y="58" font-size="18" fill="#f8fdff" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">ORACOLO DELLA TEMPESTA</text><text x="32" y="458" font-size="34" fill="#f8fdff" font-family="Georgia, serif" font-weight="700">Tempesta Rune</text>
 </svg>

@@ -6,12 +6,14 @@ Spotlight Suspects is a local-first real-time party card game for the browser. O
 
 - Real-time multiplayer rooms with a minimum of 3 players to start and a maximum of 14 players per room
 - Create and join flow with shareable room codes and reconnect support
+- Reliable room joining from manual room code entry or shareable `?room=CODE` links
 - Fully localized Italian in-game experience for UI, rules, prompts, and player feedback
 - Two complete game modes: Classic and Dictator
 - Server-authoritative game state with Socket.IO
 - Server-timed round flow with question reveal, 15-second reading time, 30-second voting, reveal, scoring, and rematch flow
 - Persistent all-time wins leaderboard stored in JSON on the server
 - 14 generated placeholder character cards as editable SVG assets
+- Fairytale / fantasy SVG character cards with stable IDs and replaceable asset paths
 - 64 editable prompt cards in JSON, now localized in Italian
 - Responsive React + Vite interface with card animations and optional procedural sounds
 - Unique character cards per room, enforced server-side
@@ -79,6 +81,7 @@ This repository supports Render as a single full-stack service:
 - Start command: `npm run start`
 
 In production, Express serves the built frontend from `client/dist` while preserving `/api/*` routes and Socket.IO.
+Health checks are available at `/health` and `/api/health`.
 
 ## How Room Creation Works
 
@@ -90,6 +93,7 @@ In production, Express serves the built frontend from `client/dist` while preser
 6. A game can only start with at least 3 connected players.
 7. A room accepts at most 14 players.
 8. Character cards are unique inside a room. If a card is already claimed, the server rejects duplicate selection.
+9. Successful joins are broadcast immediately so every connected device sees the updated lobby state in real time.
 
 ## Game Modes
 
@@ -152,6 +156,14 @@ Stored data includes:
 - Last room results
 
 The file is created automatically on first run.
+
+## Backend Robustness
+
+- The server binds with `process.env.PORT || 3001`
+- Socket.IO shares the same HTTP server as Express
+- Production serving keeps API routes and sockets intact
+- Startup, room creation, join failures, vote failures, and disconnects are logged
+- Unhandled promise rejections and uncaught exceptions are surfaced in server logs
 
 ## Key Implementation Decisions
 

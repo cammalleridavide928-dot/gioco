@@ -2,5 +2,5 @@
   <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1e1934"/><stop offset="100%" stop-color="#ff7a59"/></linearGradient></defs>
   <rect width="360" height="520" rx="28" fill="url(#g)"/><rect x="18" y="18" width="324" height="484" rx="22" fill="none" stroke="#ffe9de" stroke-width="4"/>
   <circle cx="180" cy="190" r="84" fill="#ffe9de" fill-opacity="0.18"/><path d="M105 284c20-68 48-126 75-126 28 0 56 58 76 126" fill="#ffe9de"/><circle cx="180" cy="154" r="46" fill="#ffe9de"/><path d="M135 122c24-22 70-20 90 6-4 12-10 18-20 24-16-14-44-20-70-11z" fill="#2f2148"/>
-  <text x="32" y="58" font-size="18" fill="#fff6ef" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">DJ DEI PETTEGOLEZZI</text><text x="32" y="458" font-size="34" fill="#fff6ef" font-family="Georgia, serif" font-weight="700">Nova Noir</text>
+  <text x="32" y="58" font-size="18" fill="#fff6ef" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">CAVALIERA DELLE LANTERNE</text><text x="32" y="458" font-size="34" fill="#fff6ef" font-family="Georgia, serif" font-weight="700">Lady Ember</text>
 </svg>

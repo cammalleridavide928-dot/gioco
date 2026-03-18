@@ -2,5 +2,5 @@
   <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4a194c"/><stop offset="100%" stop-color="#f28fff"/></linearGradient></defs>
   <rect width="360" height="520" rx="28" fill="url(#g)"/><rect x="18" y="18" width="324" height="484" rx="22" fill="none" stroke="#fff0ff" stroke-width="4"/>
   <path d="M84 322c22-72 56-116 96-116 43 0 78 43 96 116" fill="#fff0ff"/><circle cx="180" cy="164" r="46" fill="#fff0ff"/><path d="M118 146c20-33 56-50 96-45 31 3 55 23 56 52-27-12-53-16-80-14-29 3-43 8-72 7z" fill="#6a2371"/><path d="M85 111l31 8-8 31 30-14 18 25 5-31 31 1-23-21 16-27-30 9-14-27-14 28-31-7 17 26z" fill="#ffd7ff"/>
-  <text x="32" y="58" font-size="18" fill="#fff9ff" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">FILOSOFO DEL SOTTOSCALA</text><text x="32" y="458" font-size="34" fill="#fff9ff" font-family="Georgia, serif" font-weight="700">Otto Oddity</text>
+  <text x="32" y="58" font-size="18" fill="#fff9ff" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">AMMAZZAGIGANTI</text><text x="32" y="458" font-size="34" fill="#fff9ff" font-family="Georgia, serif" font-weight="700">Brom Stone</text>
 </svg>

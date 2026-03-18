@@ -2,5 +2,5 @@
   <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#092746"/><stop offset="100%" stop-color="#44c7f4"/></linearGradient></defs>
   <rect width="360" height="520" rx="28" fill="url(#g)"/><rect x="18" y="18" width="324" height="484" rx="22" fill="none" stroke="#dff8ff" stroke-width="4"/>
   <circle cx="145" cy="178" r="62" fill="#dff8ff"/><circle cx="215" cy="198" r="70" fill="#dff8ff" fill-opacity="0.45"/><path d="M90 324c24-76 62-118 104-118 42 0 73 39 76 118" fill="#dff8ff"/><path d="M132 140c24-35 75-40 100 0-36-8-65-1-100 0z" fill="#104e74"/>
-  <text x="32" y="58" font-size="18" fill="#f3fdff" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">STAGISTA DELL ILLUSIONE</text><text x="32" y="458" font-size="34" fill="#f3fdff" font-family="Georgia, serif" font-weight="700">Milo Mirage</text>
+  <text x="32" y="58" font-size="18" fill="#f3fdff" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">MAGO DELLE ILLUSIONI</text><text x="32" y="458" font-size="34" fill="#f3fdff" font-family="Georgia, serif" font-weight="700">Orion Quill</text>
 </svg>
