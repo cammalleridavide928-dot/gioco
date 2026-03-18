@@ -66,18 +66,27 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('room:updateSettings', (payload, callback = () => {}) => {
+  socket.on('room:updateSettings', async (payload, callback = () => {}) => {
     try {
-      roomManager.updateSettings(socket, payload);
+      await roomManager.updateSettings(socket, payload);
       callback({ ok: true });
     } catch (error) {
       callback({ ok: false, error: error.message });
     }
   });
 
-  socket.on('room:kick', (targetId, callback = () => {}) => {
+  socket.on('room:updateProfile', async (payload, callback = () => {}) => {
     try {
-      roomManager.kickPlayer(socket, targetId);
+      const result = await roomManager.updateProfile(socket, payload);
+      callback({ ok: true, ...result });
+    } catch (error) {
+      callback({ ok: false, error: error.message });
+    }
+  });
+
+  socket.on('room:kick', async (targetId, callback = () => {}) => {
+    try {
+      await roomManager.kickPlayer(socket, targetId);
       callback({ ok: true });
     } catch (error) {
       callback({ ok: false, error: error.message });
@@ -104,16 +113,16 @@ io.on('connection', (socket) => {
 
   socket.on('game:dictatorChoice', (targetId, callback = () => {}) => {
     try {
-      roomManager.submitDictatorChoice(socket, targetId);
+      roomManager.submitVote(socket, targetId);
       callback({ ok: true });
     } catch (error) {
       callback({ ok: false, error: error.message });
     }
   });
 
-  socket.on('game:restart', (_payload, callback = () => {}) => {
+  socket.on('game:restart', async (_payload, callback = () => {}) => {
     try {
-      roomManager.restartGame(socket);
+      await roomManager.restartGame(socket);
       callback({ ok: true });
     } catch (error) {
       callback({ ok: false, error: error.message });
@@ -121,7 +130,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    roomManager.handleDisconnect(socket);
+    roomManager.handleDisconnect(socket).catch(() => {});
   });
 });
 

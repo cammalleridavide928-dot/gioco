@@ -9,11 +9,12 @@ Spotlight Suspects is a local-first real-time party card game for the browser. O
 - Fully localized Italian in-game experience for UI, rules, prompts, and player feedback
 - Two complete game modes: Classic and Dictator
 - Server-authoritative game state with Socket.IO
-- Secret voting, reveal phase, scoreboard, round timer, and rematch flow
+- Server-timed round flow with question reveal, 15-second reading time, 30-second voting, reveal, scoring, and rematch flow
 - Persistent all-time wins leaderboard stored in JSON on the server
 - 14 generated placeholder character cards as editable SVG assets
 - 64 editable prompt cards in JSON, now localized in Italian
 - Responsive React + Vite interface with card animations and optional procedural sounds
+- Unique character cards per room, enforced server-side
 - Render-ready single-service deployment, with Express serving the built client in production
 
 ## Tech Stack
@@ -88,33 +89,39 @@ In production, Express serves the built frontend from `client/dist` while preser
 5. A reconnect token is stored in browser local storage so a player can recover their seat after a refresh.
 6. A game can only start with at least 3 connected players.
 7. A room accepts at most 14 players.
+8. Character cards are unique inside a room. If a card is already claimed, the server rejects duplicate selection.
 
 ## Game Modes
 
 ### Classic Mode
 
 - Default round count: 8
-- Every round reveals one prompt card.
+- Every round starts with the prompt card revealed in the center of the table.
+- A 15-second reading phase begins automatically before voting.
 - All connected players secretly vote for another connected player.
 - Players cannot vote for themselves.
-- When everyone has voted, or the 30-second timer ends, the round reveals automatically.
-- Every player tied for the highest vote count gains 1 point.
+- Voting lasts at most 30 seconds.
+- If everyone votes early, the server ends voting immediately.
+- The server reveals all votes, then awards 1 point to every player tied for the highest vote count.
 - The game ends after the configured number of rounds.
 
 ### Dictator Mode
 
 - The dictator rotates in seat order based on the players present when the game starts.
-- Each round only non-dictator players vote secretly.
-- After voting ends, the table sees the full vote reveal and the top-voted crowd set.
-- The dictator then chooses any connected player except themselves.
-- The chosen target gains 1 point.
-- The dictator gains 1 bonus point only if their final pick belongs to the crowd's top-voted set.
+- Each round starts with the prompt card revealed, followed by a 15-second reading phase.
+- During voting, the dictator secretly chooses one other player.
+- Every non-dictator player votes for the player they believe the dictator selected.
+- Voting lasts at most 30 seconds and ends early if everyone submits.
+- During reveal, the table sees the dictator's hidden choice and every player's guess.
+- Every non-dictator player who guessed correctly earns 1 point.
+- If nobody guessed correctly, every player who voted for the most popular guessed target earns 1 point.
+- The dictator earns no points during their own turn.
 - If the scheduled dictator is disconnected when their turn arrives, the server skips their round and moves to the next available dictator.
 - The game ends after every starting player has had a dictator slot considered once.
 
 ## Rules Modal
 
-The client includes an in-game rules modal in Italian that mirrors the scoring rules above and clearly states the 3-player minimum and 14-player maximum.
+The client includes an in-game rules modal in Italian that mirrors the scoring rules above, the 15-second reading phase, the 30-second voting phase, and the 3-player minimum / 14-player maximum.
 
 ## Customizing Characters
 

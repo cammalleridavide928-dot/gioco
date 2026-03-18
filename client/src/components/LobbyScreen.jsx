@@ -1,7 +1,13 @@
+import CharacterPicker from './CharacterPicker.jsx';
+
 export default function LobbyScreen({
   room,
   selfPlayer,
+  bootstrap,
   charactersById,
+  profileDraft,
+  setProfileDraft,
+  onSaveProfile,
   onStartGame,
   onUpdateSettings,
   onKick,
@@ -12,7 +18,10 @@ export default function LobbyScreen({
 }) {
   const inviteLink = `${window.location.origin}?room=${room.roomCode}`;
   const connectedPlayers = room.players.filter((player) => player.connected).length;
-  const canStart = connectedPlayers >= 3;
+  const canStart = connectedPlayers >= bootstrap.minPlayers;
+  const unavailableCharacterIds = room.players
+    .filter((player) => player.id !== selfPlayer?.id)
+    .map((player) => player.characterId);
 
   return (
     <main className="lobby-shell">
@@ -32,7 +41,7 @@ export default function LobbyScreen({
           <div className="panel-header">
             <div>
               <p className="eyebrow">Invita</p>
-              <h2>Fai entrare il gruppo al volo</h2>
+              <h2>Porta il gruppo al tavolo</h2>
             </div>
             <button type="button" className="secondary-button" onClick={() => onCopyInvite(inviteLink)}>Copia link</button>
           </div>
@@ -41,6 +50,7 @@ export default function LobbyScreen({
             <strong>{room.roomCode}</strong>
             <small>{inviteLink}</small>
           </div>
+
           <div className="settings-grid">
             <label>
               <span>Modalita</span>
@@ -71,10 +81,9 @@ export default function LobbyScreen({
               />
             </label>
           </div>
+
           <p className="helper-text">
-            {selfPlayer?.isHost
-              ? 'Sei l host: scegli la modalita e avvia quando siete almeno in 3. La stanza supporta fino a 14 giocatori.'
-              : 'In attesa dell host. Per partire servono almeno 3 giocatori; il massimo e 14.'}
+            Servono almeno {bootstrap.minPlayers} giocatori per iniziare, con un massimo di {bootstrap.maxPlayers} persone in stanza.
           </p>
           {error ? <p className="error-banner">{error}</p> : null}
           {selfPlayer?.isHost ? (
@@ -87,33 +96,64 @@ export default function LobbyScreen({
         <div className="panel">
           <div className="panel-header">
             <div>
-              <p className="eyebrow">Giocatori</p>
-              <h2>Posti al tavolo</h2>
+              <p className="eyebrow">Il tuo profilo</p>
+              <h2>Scegli una carta unica</h2>
             </div>
-            <span>{room.players.length} / 14</span>
+            <button type="button" className="secondary-button" onClick={onSaveProfile}>Salva profilo</button>
           </div>
-          <div className="lobby-players">
-            {room.players
-              .slice()
-              .sort((a, b) => a.seat - b.seat)
-              .map((player) => {
-                const character = charactersById[player.characterId];
-                return (
-                  <article className={`lobby-player ${!player.connected ? 'offline' : ''}`} key={player.id}>
-                    <img src={character.asset} alt={character.name} />
-                    <div>
-                      <strong>{player.displayName}</strong>
-                      <p>{character.name}</p>
-                      <small>{player.connected ? 'Connesso' : 'Disconnesso'}</small>
-                    </div>
+
+          <label>
+            <span>Nome giocatore</span>
+            <input
+              value={profileDraft.displayName}
+              maxLength={20}
+              onChange={(event) => setProfileDraft((current) => ({ ...current, displayName: event.target.value }))}
+            />
+          </label>
+
+          <CharacterPicker
+            characters={bootstrap.characters}
+            selectedId={profileDraft.characterId}
+            onSelect={(characterId) => setProfileDraft((current) => ({ ...current, characterId }))}
+            unavailableIds={unavailableCharacterIds}
+            lockedId={selfPlayer?.characterId}
+            compact
+          />
+        </div>
+      </section>
+
+      <section className="panel">
+        <div className="panel-header">
+          <div>
+            <p className="eyebrow">Giocatori</p>
+            <h2>Posti prenotati</h2>
+          </div>
+          <span>{room.players.length} / {bootstrap.maxPlayers}</span>
+        </div>
+        <div className="lobby-players">
+          {room.players
+            .slice()
+            .sort((a, b) => a.seat - b.seat)
+            .map((player) => {
+              const character = charactersById[player.characterId];
+              return (
+                <article className={`lobby-player ${!player.connected ? 'offline' : ''}`} key={player.id}>
+                  <img src={character.asset} alt={character.name} />
+                  <div>
+                    <strong>{player.displayName}</strong>
+                    <p>{character.name}</p>
+                    <small>{player.connected ? 'Connesso' : 'Disconnesso'}</small>
+                  </div>
+                  <div className="lobby-player-meta">
                     {player.isHost ? <span className="badge">Host</span> : null}
-                    {selfPlayer?.isHost && player.id !== selfPlayer.id ? (
-                      <button type="button" className="ghost-button small" onClick={() => onKick(player.id)}>Espelli</button>
-                    ) : null}
-                  </article>
-                );
-              })}
-          </div>
+                    <span className="badge soft">Posto {player.seat}</span>
+                  </div>
+                  {selfPlayer?.isHost && player.id !== selfPlayer.id ? (
+                    <button type="button" className="ghost-button small" onClick={() => onKick(player.id)}>Espelli</button>
+                  ) : null}
+                </article>
+              );
+            })}
         </div>
       </section>
     </main>

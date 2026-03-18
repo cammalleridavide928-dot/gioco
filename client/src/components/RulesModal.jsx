@@ -2,22 +2,24 @@ const rules = {
   common: [
     'Si gioca da 3 a 14 persone.',
     'Il server controlla stanza, voti, timer e punteggi.',
-    'Ogni round dura al massimo 30 secondi.',
+    'Ogni round mostra la domanda, poi 15 secondi di lettura e fino a 30 secondi di voto.',
     'Chi si disconnette durante la partita resta al tavolo come assente e puo rientrare.'
   ],
   classic: [
+    'La domanda appare al centro del tavolo e resta visibile durante tutto il round.',
     'Tutti votano in segreto un altro giocatore connesso.',
     'Non puoi votare te stesso.',
-    'Il round finisce quando arrivano tutti i voti oppure scade il timer.',
-    'Ogni giocatore a pari merito in testa prende 1 punto.',
+    'Se tutti votano prima dello scadere dei 30 secondi, il round accelera subito.',
+    'Dopo la rivelazione, ogni giocatore a pari merito in testa prende 1 punto.',
     'La modalita Classica dura per il numero di round scelto dall host.'
   ],
   dictator: [
     'Ogni round un giocatore diverso diventa il Dittatore seguendo l ordine dei posti.',
-    'Solo i non-dittatori votano in segreto.',
-    'Dopo la rivelazione, il Dittatore sceglie un giocatore connesso diverso da se stesso.',
-    'Il bersaglio scelto prende 1 punto.',
-    'Il Dittatore prende 1 punto bonus solo se la sua scelta coincide con il gruppo dei piu votati.'
+    'Dopo i 15 secondi di lettura, il Dittatore vota in segreto un altro giocatore.',
+    'Gli altri giocatori votano chi pensano sia stato scelto dal Dittatore.',
+    'Non puoi mai votare te stesso.',
+    'Se indovini la scelta del Dittatore, prendi 1 punto.',
+    'Se nessuno indovina, segnano i voti sul bersaglio piu popolare tra le ipotesi del tavolo.'
   ]
 };
 

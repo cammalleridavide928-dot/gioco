@@ -3,9 +3,11 @@ import { randomUUID } from 'node:crypto';
 export const MAX_PLAYERS = 14;
 export const MIN_PLAYERS = 3;
 export const DEFAULT_CLASSIC_ROUNDS = 8;
-export const TURN_SECONDS = 30;
-export const REVEAL_SECONDS = 6;
-export const DICTATOR_CHOICE_SECONDS = 15;
+export const READING_SECONDS = 15;
+export const VOTING_SECONDS = 30;
+export const QUESTION_REVEAL_SECONDS = 1;
+export const REVEAL_SECONDS = 5;
+export const SCORING_SECONDS = 4;
 
 export function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);

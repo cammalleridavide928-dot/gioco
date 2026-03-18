@@ -19,6 +19,7 @@ export default function App() {
   const [bootstrap, setBootstrap] = useState(null);
   const [room, setRoom] = useState(null);
   const [draft, setDraft] = useState(emptyDraft);
+  const [profileDraft, setProfileDraft] = useState({ displayName: '', characterId: '' });
   const [error, setError] = useState('');
   const [rulesOpen, setRulesOpen] = useState(false);
   const [session, setSession] = useLocalStorage('spotlight-session', null);
@@ -43,12 +44,12 @@ export default function App() {
     socket.on('room:update', (nextRoom) => {
       setRoom((current) => {
         if (current?.game?.phase !== nextRoom.game?.phase) {
-          if (nextRoom.game?.phase === 'reveal') {
+          if (nextRoom.game?.phase === 'question_reveal') {
+            sounds.playFlip();
+          } else if (nextRoom.game?.phase === 'reveal') {
             sounds.playRoundEnd();
           } else if (nextRoom.game?.phase === 'game_over') {
             sounds.playWinner();
-          } else if (nextRoom.game?.phase === 'voting') {
-            sounds.playFlip();
           }
         }
         return { ...nextRoom, leaderboard: nextRoom.leaderboard || current?.leaderboard || null };
@@ -56,11 +57,16 @@ export default function App() {
       if (nextRoom.leaderboard) {
         setBootstrap((current) => current ? { ...current, leaderboard: nextRoom.leaderboard } : current);
       }
+      const self = nextRoom.players.find((player) => player.id === nextRoom.selfId);
+      if (self) {
+        setProfileDraft({ displayName: self.displayName, characterId: self.characterId });
+        setSession((current) => current ? { ...current, displayName: self.displayName, characterId: self.characterId, roomCode: nextRoom.roomCode } : current);
+      }
       window.history.replaceState({}, '', nextRoom.roomCode ? `?room=${nextRoom.roomCode}` : window.location.pathname);
       setError('');
     });
     return () => socket.disconnect();
-  }, [sounds]);
+  }, [setSession, sounds]);
 
   useEffect(() => {
     if (!bootstrap || !socketRef.current || autoJoinAttempted.current || !session?.roomCode || !session?.sessionId) {
@@ -153,6 +159,15 @@ export default function App() {
     }
   }
 
+  async function handleSaveProfile() {
+    const result = await emit('room:updateProfile', profileDraft);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    setSession((current) => current ? { ...current, displayName: result.displayName, characterId: result.characterId } : current);
+  }
+
   async function handleStartGame() {
     const result = await emit('game:start', {});
     if (!result.ok) {
@@ -172,13 +187,6 @@ export default function App() {
     if (result.ok) {
       sounds.playVote();
     } else {
-      setError(result.error);
-    }
-  }
-
-  async function handleDictatorChoice(targetId) {
-    const result = await emit('game:dictatorChoice', targetId);
-    if (!result.ok) {
       setError(result.error);
     }
   }
@@ -223,7 +231,11 @@ export default function App() {
         <LobbyScreen
           room={room}
           selfPlayer={selfPlayer}
+          bootstrap={bootstrap}
           charactersById={charactersById}
+          profileDraft={profileDraft}
+          setProfileDraft={setProfileDraft}
+          onSaveProfile={handleSaveProfile}
           onStartGame={handleStartGame}
           onUpdateSettings={handleUpdateSettings}
           onKick={handleKick}
@@ -238,7 +250,6 @@ export default function App() {
           selfPlayer={selfPlayer}
           charactersById={charactersById}
           onVote={handleVote}
-          onDictatorChoice={handleDictatorChoice}
           onRestart={handleRestart}
           onLeave={handleLeave}
           onOpenRules={() => setRulesOpen(true)}
