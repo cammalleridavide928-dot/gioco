@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 520">
+  <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#482113"/><stop offset="100%" stop-color="#ff9666"/></linearGradient></defs>
+  <rect width="360" height="520" rx="28" fill="url(#g)"/><rect x="18" y="18" width="324" height="484" rx="22" fill="none" stroke="#fff1e8" stroke-width="4"/>
+  <path d="M82 324c20-72 53-120 98-120 44 0 77 46 98 120" fill="#fff1e8"/><circle cx="180" cy="166" r="48" fill="#fff1e8"/><path d="M114 148c14-31 46-52 83-52 29 0 53 16 60 45-24-8-47-12-69-11-24 1-51 8-74 18z" fill="#6f3018"/><circle cx="272" cy="128" r="24" fill="#ffd1b7"/><rect x="260" y="152" width="24" height="62" rx="12" fill="#ffd1b7"/>
+  <text x="32" y="58" font-size="18" fill="#fff9f6" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">KARAOKE WILDCARD</text><text x="32" y="458" font-size="34" fill="#fff9f6" font-family="Georgia, serif" font-weight="700">Ricky Racket</text>
+</svg>

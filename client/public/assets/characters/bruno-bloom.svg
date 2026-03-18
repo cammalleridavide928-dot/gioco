@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 520">
+  <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#12362d"/><stop offset="100%" stop-color="#59d28c"/></linearGradient></defs>
+  <rect width="360" height="520" rx="28" fill="url(#g)"/><rect x="18" y="18" width="324" height="484" rx="22" fill="none" stroke="#ebfff0" stroke-width="4"/>
+  <path d="M84 322c22-74 54-118 96-118 42 0 76 45 96 118" fill="#ebfff0"/><circle cx="180" cy="163" r="46" fill="#ebfff0"/><path d="M120 140c20-28 82-46 117 3-36-4-69 5-117-3z" fill="#235c44"/><path d="M75 118c24-10 46-11 68-4-10 16-24 24-42 28zM212 92c30 0 52 7 68 22-20 8-40 12-59 10z" fill="#c8ffd7"/>
+  <text x="32" y="58" font-size="18" fill="#fbfffc" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">CHAOTIC GARDEN POET</text><text x="32" y="458" font-size="34" fill="#fbfffc" font-family="Georgia, serif" font-weight="700">Bruno Bloom</text>
+</svg>

@@ -1,0 +1,16 @@
+[
+  { "id": "nova-noir", "name": "Nova Noir", "title": "Midnight Gossip DJ", "asset": "/assets/characters/nova-noir.svg", "accent": "#ff7a59" },
+  { "id": "piper-plume", "name": "Piper Plume", "title": "Drama Club Oracle", "asset": "/assets/characters/piper-plume.svg", "accent": "#f6c453" },
+  { "id": "milo-mirage", "name": "Milo Mirage", "title": "Illusionist Intern", "asset": "/assets/characters/milo-mirage.svg", "accent": "#44c7f4" },
+  { "id": "zara-zap", "name": "Zara Zap", "title": "Afterparty Meteor", "asset": "/assets/characters/zara-zap.svg", "accent": "#ff5db1" },
+  { "id": "bruno-bloom", "name": "Bruno Bloom", "title": "Chaotic Garden Poet", "asset": "/assets/characters/bruno-bloom.svg", "accent": "#59d28c" },
+  { "id": "lola-lattice", "name": "Lola Lattice", "title": "Conspiracy Stylist", "asset": "/assets/characters/lola-lattice.svg", "accent": "#b282ff" },
+  { "id": "ricky-racket", "name": "Ricky Racket", "title": "Karaoke Wildcard", "asset": "/assets/characters/ricky-racket.svg", "accent": "#ff9666" },
+  { "id": "tess-tempest", "name": "Tess Tempest", "title": "Forecast of Trouble", "asset": "/assets/characters/tess-tempest.svg", "accent": "#6ad5ff" },
+  { "id": "gus-glimmer", "name": "Gus Glimmer", "title": "Discount Celeb Twin", "asset": "/assets/characters/gus-glimmer.svg", "accent": "#ffd166" },
+  { "id": "vivi-velvet", "name": "Vivi Velvet", "title": "Lounge Legend", "asset": "/assets/characters/vivi-velvet.svg", "accent": "#ff6fa8" },
+  { "id": "dario-disco", "name": "Dario Disco", "title": "Roller-Rink Prophet", "asset": "/assets/characters/dario-disco.svg", "accent": "#4ddc9b" },
+  { "id": "nina-nimbus", "name": "Nina Nimbus", "title": "Cloud Mood Influencer", "asset": "/assets/characters/nina-nimbus.svg", "accent": "#86b7ff" },
+  { "id": "otto-oddity", "name": "Otto Oddity", "title": "Basement Philosopher", "asset": "/assets/characters/otto-oddity.svg", "accent": "#f28fff" },
+  { "id": "suki-spark", "name": "Suki Spark", "title": "Festival Dare Captain", "asset": "/assets/characters/suki-spark.svg", "accent": "#ffb347" }
+]
