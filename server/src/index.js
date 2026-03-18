@@ -1,8 +1,17 @@
 import express from 'express';
 import http from 'node:http';
+import path from 'node:path';
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import cors from 'cors';
 import { Server } from 'socket.io';
 import { RoomManager } from './state/roomManager.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const clientDistPath = path.resolve(__dirname, '../../client/dist');
+const clientIndexPath = path.join(clientDistPath, 'index.html');
+const shouldServeClient = process.env.NODE_ENV === 'production' && existsSync(clientIndexPath);
 
 const app = express();
 const server = http.createServer(app);
@@ -25,6 +34,18 @@ app.get('/api/bootstrap', async (_req, res) => {
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true });
 });
+
+if (shouldServeClient) {
+  app.use(express.static(clientDistPath));
+
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path === '/socket.io' || req.path.startsWith('/socket.io/')) {
+      next();
+      return;
+    }
+    res.sendFile(clientIndexPath);
+  });
+}
 
 io.on('connection', (socket) => {
   socket.on('room:create', async (payload, callback = () => {}) => {
