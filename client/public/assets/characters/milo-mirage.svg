@@ -1,6 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 520">
-  <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#092746"/><stop offset="100%" stop-color="#44c7f4"/></linearGradient></defs>
-  <rect width="360" height="520" rx="28" fill="url(#g)"/><rect x="18" y="18" width="324" height="484" rx="22" fill="none" stroke="#dff8ff" stroke-width="4"/>
-  <circle cx="145" cy="178" r="62" fill="#dff8ff"/><circle cx="215" cy="198" r="70" fill="#dff8ff" fill-opacity="0.45"/><path d="M90 324c24-76 62-118 104-118 42 0 73 39 76 118" fill="#dff8ff"/><path d="M132 140c24-35 75-40 100 0-36-8-65-1-100 0z" fill="#104e74"/>
-  <text x="32" y="58" font-size="18" fill="#f3fdff" font-family="'Trebuchet MS', sans-serif" letter-spacing="2">MAGO DELLE ILLUSIONI</text><text x="32" y="458" font-size="34" fill="#f3fdff" font-family="Georgia, serif" font-weight="700">Orion Quill</text>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#162d4a"/>
+      <stop offset="100%" stop-color="#44c7f4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.34"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="360" height="520" rx="30" fill="url(#bg)"/>
+  <rect x="16" y="16" width="328" height="488" rx="24" fill="none" stroke="#fff4e6" stroke-width="4" opacity="0.92"/>
+  <rect x="30" y="30" width="300" height="460" rx="22" fill="url(#glow)" opacity="0.38"/>
+  <ellipse cx="180" cy="220" rx="96" ry="122" fill="#fff3e9" fill-opacity="0.16"/>
+  <ellipse cx="180" cy="444" rx="118" ry="24" fill="#130d18" fill-opacity="0.18"/>
+  <path d="M100 328c22-36 50-56 80-56s58 20 80 56v78H100z" fill="#315dc9"/>
+  <path d="M116 328c16 18 34 28 64 28s48-10 64-28v68H116z" fill="#ffffff" fill-opacity="0.08"/>
+  <circle cx="180" cy="206" r="56" fill="#f5d1b8"/>
+  <path d="M126 154l54-86 54 86z" fill="#f9f1d6"/><circle cx="168" cy="102" r="5" fill="#b6f0ff"/><circle cx="198" cy="118" r="6" fill="#b6f0ff"/>
+  <ellipse cx="158" cy="208" rx="8" ry="10" fill="#2d2238"/>
+  <ellipse cx="202" cy="208" rx="8" ry="10" fill="#2d2238"/>
+  <circle cx="160" cy="206" r="3" fill="#ffffff"/>
+  <circle cx="204" cy="206" r="3" fill="#ffffff"/>
+  <path d="M158 240c14 10 30 10 44 0" stroke="#7a3d3d" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <circle cx="132" cy="226" r="10" fill="#ffb8a6" fill-opacity="0.45"/>
+  <circle cx="228" cy="226" r="10" fill="#ffb8a6" fill-opacity="0.45"/>
+  <path d="M180 324l16 30 34 4-24 22 8 34-34-18-34 18 8-34-24-22 34-4z" fill="#b6f0ff"/>
+  <text x="30" y="58" font-size="17" fill="#fff7ef" font-family="Trebuchet MS, sans-serif" letter-spacing="1.6">MAGO DEI MIRAGGI</text>
+  <text x="30" y="460" font-size="34" fill="#fff7ef" font-family="Georgia, serif" font-weight="700">Orion Quill</text>
 </svg>

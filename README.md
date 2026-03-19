@@ -12,10 +12,10 @@ Spotlight Suspects is a local-first real-time party card game for the browser. O
 - Server-authoritative game state with Socket.IO
 - Server-timed round flow with question reveal, 15-second reading time, 30-second voting, reveal, scoring, and rematch flow
 - Persistent all-time wins leaderboard stored in JSON on the server
-- 14 generated placeholder character cards as editable SVG assets
-- Fairytale / fantasy SVG character cards with stable IDs and replaceable asset paths
-- 64 editable prompt cards in JSON, now localized in Italian
-- Responsive React + Vite interface with a poker-table board that adapts across desktop, tablet, and phone
+- 14 generated cartoon fairytale SVG character cards with stable IDs and replaceable asset paths
+- 64 editable prompt cards in JSON, localized in Italian and rewritten with a more absurd party-game tone
+- Responsive React + Vite interface with a poker-table board refined for desktop, tablet, and phone
+- Hover-stable card interactions that avoid desktop flicker and layout jitter
 - Unique character cards per room, enforced server-side
 - Render-ready single-service deployment, with Express serving the built client in production
 
@@ -133,6 +133,8 @@ The client includes an in-game rules modal in Italian that mirrors the scoring r
 - Player cards are distributed around the table perimeter based on seat order and player count
 - Voting controls appear below the table during the voting phase
 - The board remains responsive across desktop, tablet, and mobile, keeping the table-centric feel
+- Character cards use a cohesive cartoon fairytale art direction with clearer framing and disabled states
+- Hover effects are transform-based and isolated so table cards stay stable on desktop
 
 ## Customizing Characters
 
@@ -141,7 +143,7 @@ Edit these files:
 - Character metadata: [server/src/data/characters.json](/c:/Users/camma/Desktop/gioco/server/src/data/characters.json)
 - Character SVG art: [client/public/assets/characters](/c:/Users/camma/Desktop/gioco/client/public/assets/characters)
 
-Each character entry includes a stable `id`, `name`, `title`, palette info, and an asset path so you can swap art later without changing gameplay code.
+Each character entry includes a stable `id`, `name`, `title`, palette info, and an asset path so you can swap art later without changing gameplay code. The default deck now uses a colorful cartoon fairytale look.
 
 ## Customizing Prompt Cards
 
@@ -149,7 +151,7 @@ Edit:
 
 - Prompt deck: [server/src/data/prompts.json](/c:/Users/camma/Desktop/gioco/server/src/data/prompts.json)
 
-The default deck is localized in Italian. The backend shuffles the deck, avoids repeats until exhaustion, and then reshuffles automatically.
+The default deck is localized in Italian, with a more absurd and theatrical party-game tone. The backend shuffles the deck, avoids repeats until exhaustion, and then reshuffles automatically.
 
 ## Persistence
 
@@ -180,8 +182,8 @@ The file is created automatically on first run.
 - Reconnect policy: browser session token restores a player seat if the same room is rejoined
 - Minimum players to start: 3 connected players
 - Maximum room size: 14 players
-- Classic tie rule: every tied top-voted player gets 1 point
-- Dictator scoring: target always gets 1 point, dictator gets 1 bonus point only for matching the top crowd set
+- Classic scoring: every voter who chose one of the top-voted targets gets 1 point
+- Dictator scoring: correct guessers score; if nobody guesses correctly, voters on the most popular guessed target score instead
 - Client preference persistence: mute state and reconnect session are stored in local storage
 
 ## Future Improvements

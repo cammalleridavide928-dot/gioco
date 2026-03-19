@@ -210,6 +210,11 @@ select {
   color: var(--text);
   cursor: pointer;
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .character-choice:hover,
@@ -230,11 +235,23 @@ select {
   opacity: 0.45;
 }
 
+.character-choice::after,
+.vote-card::after,
+.seat-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
 .character-choice img,
 .vote-card img {
   aspect-ratio: 0.7;
   object-fit: cover;
   border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
 }
 
 .character-copy {
@@ -373,6 +390,7 @@ select {
 
 .table-panel {
   padding: 18px;
+  overflow: hidden;
 }
 
 .table-surface {
@@ -384,6 +402,7 @@ select {
     radial-gradient(circle at 50% 50%, rgba(5, 16, 21, 0.55), rgba(5, 12, 16, 0.95) 72%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
   border: 1px solid rgba(255, 255, 255, 0.08);
+  isolation: isolate;
 }
 
 .table-rail {
@@ -411,6 +430,7 @@ select {
   width: min(48vw, 420px);
   transform: translate(-50%, -50%);
   z-index: 3;
+  pointer-events: none;
 }
 
 .prompt-card-main {
@@ -459,17 +479,23 @@ select {
   position: absolute;
   inset: 0;
   z-index: 2;
+  contain: layout paint;
 }
 
 .seat-card {
   position: absolute;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translateY(var(--seat-hover-shift, 0));
   width: 132px;
   padding: 10px;
   border-radius: 20px;
   background: rgba(8, 18, 24, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-origin: center center;
+  z-index: 1;
 }
 
 .seat-lg { width: 142px; }
@@ -481,6 +507,7 @@ select {
   aspect-ratio: 0.76;
   object-fit: cover;
   border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
 }
 
 .seat-copy {
@@ -526,6 +553,11 @@ select {
 
 .seat-card.targeted {
   border-color: rgba(242, 198, 109, 0.65);
+}
+
+.seat-card:hover {
+  --seat-hover-shift: -4px;
+  z-index: 4;
 }
 
 .vote-tray,
@@ -651,7 +683,7 @@ select {
   }
 
   .table-surface {
-    min-height: 780px;
+    min-height: 760px;
   }
 
   .prompt-spot {
@@ -669,7 +701,7 @@ select {
   }
 
   .table-surface {
-    min-height: 720px;
+    min-height: 680px;
   }
 
   .table-rail {
@@ -685,8 +717,8 @@ select {
   }
 
   .prompt-card-main {
-    min-height: 240px;
-    padding: 22px;
+    min-height: 220px;
+    padding: 20px;
   }
 
   .seat-card {
@@ -705,6 +737,10 @@ select {
     flex-direction: column;
     align-items: start;
     gap: 4px;
+  }
+
+  .vote-cards.vote-grid {
+    grid-template-columns: repeat(auto-fit, minmax(96px, 116px));
   }
 }
 
@@ -735,34 +771,47 @@ select {
   }
 
   .table-surface {
-    min-height: 640px;
+    min-height: 580px;
+    border-radius: 28px;
   }
 
   .table-rail {
-    inset: 8% 2%;
+    inset: 8% 1.5%;
+    border-radius: 48% / 38%;
   }
 
   .table-felt {
-    inset: 12% 6%;
+    inset: 12% 5%;
   }
 
   .prompt-spot {
-    width: calc(100% - 96px);
+    width: calc(100% - 110px);
+    top: 50.5%;
   }
 
   .prompt-card-main {
-    min-height: 210px;
-    padding: 18px;
+    min-height: 178px;
+    padding: 16px;
+    border-radius: 22px;
+    gap: 12px;
   }
 
   .prompt-card-main h2 {
-    font-size: 1.45rem;
+    font-size: 1.22rem;
+    line-height: 1.16;
+  }
+
+  .prompt-card-main p {
+    font-size: 0.86rem;
+    line-height: 1.35;
   }
 
   .seat-lg,
   .seat-md,
   .seat-sm {
-    width: 78px;
+    width: 70px;
+    padding: 6px;
+    border-radius: 16px;
   }
 
   .seat-copy {
@@ -791,6 +840,93 @@ select {
   }
 
   .vote-cards.vote-grid {
-    grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(82px, 1fr));
+    gap: 10px;
+  }
+
+  .vote-card {
+    border-radius: 18px;
+  }
+
+  .vote-card.mini {
+    padding: 7px;
+  }
+
+  .vote-card.mini strong {
+    font-size: 0.8rem;
+    line-height: 1.05;
+  }
+
+  .vote-card span {
+    font-size: 0.7rem;
+    line-height: 1.15;
+  }
+
+  .table-panel {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 520px) {
+  .game-topbar,
+  .table-status,
+  .vote-tray,
+  .reveal-panel {
+    padding: 16px;
+  }
+
+  .table-surface {
+    min-height: 520px;
+  }
+
+  .table-rail {
+    inset: 9% 1%;
+  }
+
+  .table-felt {
+    inset: 13% 4%;
+  }
+
+  .prompt-spot {
+    width: calc(100% - 96px);
+  }
+
+  .prompt-card-main {
+    min-height: 156px;
+    padding: 14px;
+  }
+
+  .prompt-badge {
+    padding: 6px 10px;
+    font-size: 0.72rem;
+  }
+
+  .prompt-card-main h2 {
+    font-size: 1.05rem;
+  }
+
+  .seat-lg,
+  .seat-md,
+  .seat-sm {
+    width: 62px;
+    padding: 5px;
+  }
+
+  .seat-copy strong {
+    font-size: 0.66rem;
+  }
+
+  .seat-copy span,
+  .seat-footer small,
+  .seat-footer b {
+    font-size: 0.58rem;
+  }
+
+  .table-status-grid {
+    gap: 8px;
+  }
+
+  .status-box {
+    padding: 7px 10px;
   }
 }
