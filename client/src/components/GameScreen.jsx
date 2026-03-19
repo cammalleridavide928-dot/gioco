@@ -13,40 +13,46 @@ function phaseDescription(room, selfPlayer) {
   const { game } = room;
   const dictatorId = game.dictatorPlayerId;
   const isDictator = dictatorId === selfPlayer.id;
+
   if (game.phase === 'question_reveal') {
-    return 'La carta centrale entra in scena.';
+    return 'La carta domanda entra al centro del tavolo.';
   }
   if (game.phase === 'reading_time') {
-    return 'Leggete la domanda: la votazione parte automaticamente allo scadere del timer.';
+    return 'Leggete la domanda: i controlli di voto compariranno sotto il tavolo allo scadere dei 15 secondi.';
   }
   if (game.phase === 'voting') {
     if (game.mode === 'classic') {
-      return game.selfVote ? 'Voto registrato. In attesa degli altri.' : 'Scegli in segreto chi descrive meglio la domanda.';
+      return game.selfVote
+        ? 'Voto registrato. Il server aspetta gli altri giocatori o la fine del timer.'
+        : 'Scegli in segreto il partecipante che descrive meglio la domanda.';
     }
     return isDictator
-      ? (game.selfVote ? 'La tua scelta segreta e stata registrata.' : 'Scegli in segreto un altro giocatore.')
-      : (game.selfVote ? 'La tua ipotesi e stata inviata.' : 'Indovina chi pensi abbia scelto il Dittatore.');
+      ? (game.selfVote ? 'La tua scelta segreta e stata registrata.' : 'Scegli segretamente un altro giocatore.')
+      : (game.selfVote ? 'La tua ipotesi e stata registrata.' : 'Indovina chi pensi sia stato scelto dal Dittatore.');
   }
   if (game.phase === 'reveal') {
-    return 'Il server sta mostrando tutti i voti reali del round.';
+    return 'I voti reali del round sono sotto i riflettori.';
   }
   if (game.phase === 'scoring') {
-    return 'Punti assegnati. Il prossimo round arriva tra pochi secondi.';
+    return 'Punti assegnati. Il prossimo round parte a breve.';
   }
   return 'La partita e conclusa.';
 }
 
-function getSeatPositions(players) {
+function getSeatLayout(players) {
   const count = players.length;
   const startAngle = -90;
+  const radiusX = count <= 4 ? 41 : count <= 7 ? 43 : count <= 10 ? 45 : 46;
+  const radiusY = count <= 4 ? 32 : count <= 7 ? 35 : count <= 10 ? 38 : 40;
+  const seatScale = count <= 4 ? 'lg' : count <= 8 ? 'md' : 'sm';
+
   return players.map((player, index) => {
     const angle = ((360 / Math.max(count, 1)) * index + startAngle) * (Math.PI / 180);
-    const radiusX = count <= 4 ? 38 : count <= 8 ? 42 : 45;
-    const radiusY = count <= 4 ? 33 : count <= 8 ? 35 : 37;
     const left = 50 + Math.cos(angle) * radiusX;
     const top = 50 + Math.sin(angle) * radiusY;
     return {
       ...player,
+      seatScale,
       orbitStyle: {
         left: `${left}%`,
         top: `${top}%`
@@ -60,6 +66,7 @@ function PlayerSeat({ player, character, isSelf, isDictator, isWinner, isReveale
     <article
       className={[
         'seat-card',
+        `seat-${player.seatScale}`,
         isSelf ? 'self' : '',
         isDictator ? 'dictator' : '',
         isWinner ? 'winner' : '',
@@ -71,15 +78,18 @@ function PlayerSeat({ player, character, isSelf, isDictator, isWinner, isReveale
       <img src={character.asset} alt={character.name} />
       <div className="seat-copy">
         <strong>{player.displayName}</strong>
-        <span>{player.connected ? 'Connesso' : 'Disconnesso'}</span>
+        <span>{character.name}</span>
       </div>
-      <div className="seat-score">{player.score}</div>
+      <div className="seat-footer">
+        <small>{player.connected ? 'Connesso' : 'Assente'}</small>
+        <b>{player.score} pt</b>
+      </div>
       {isDictator ? <span className="dictator-crown">Corona</span> : null}
     </article>
   );
 }
 
-function VoteTray({ room, selfPlayer, charactersById, onVote }) {
+function VoteTray({ room, charactersById, onVote }) {
   const validTargets = room.players.filter((player) => room.game.validVoteTargetIds.includes(player.id));
   const waiting = room.game.submittedVoteCount >= room.game.requiredVoteCount && room.game.requiredVoteCount > 0;
 
@@ -87,18 +97,18 @@ function VoteTray({ room, selfPlayer, charactersById, onVote }) {
     <section className="vote-tray panel">
       <div className="panel-header">
         <div>
-          <p className="eyebrow">La tua scelta</p>
-          <h3>{room.game.selfVote ? 'Voto inviato' : 'Seleziona un bersaglio'}</h3>
+          <p className="eyebrow">Area di voto</p>
+          <h3>{room.game.selfVote ? 'Voto inviato' : 'Scegli il tuo bersaglio'}</h3>
         </div>
         <span>
           {room.game.selfVote
             ? 'Il tuo voto e bloccato fino alla rivelazione.'
             : waiting
-              ? 'Tutti i voti sono arrivati.'
+              ? 'Tutti i voti richiesti sono arrivati.'
               : `Voti ricevuti: ${room.game.submittedVoteCount}/${room.game.requiredVoteCount}`}
         </span>
       </div>
-      <div className="vote-cards compact">
+      <div className="vote-cards vote-grid">
         {validTargets.map((player) => {
           const character = charactersById[player.characterId];
           return (
@@ -140,14 +150,24 @@ function RevealPanel({ room }) {
         <div>
           <h4>{resolution.type === 'classic' ? 'Voti del tavolo' : 'Scelte del round'}</h4>
           <div className="vote-list">
-            {resolution.type === 'classic' ? resolution.votes?.map((vote) => (
-              <div className="vote-row" key={`${vote.voterId}-${vote.targetId}`}>
-                <span>{vote.voterName}</span>
-                <strong>{vote.targetName}</strong>
-              </div>
-            )) : (
+            {resolution.type === 'classic' ? (
               <>
-                <div className="vote-row">
+                {resolution.votes?.map((vote) => (
+                  <div className="vote-row" key={`${vote.voterId}-${vote.targetId}`}>
+                    <span>{vote.voterName}</span>
+                    <strong>{vote.targetName}</strong>
+                  </div>
+                ))}
+                {resolution.topTargetIds?.length ? (
+                  <div className="vote-row highlight">
+                    <span>Bersaglio/i in testa</span>
+                    <strong>{resolution.topTargetIds.map((playerId) => room.players.find((player) => player.id === playerId)?.displayName).join(' e ')}</strong>
+                  </div>
+                ) : null}
+              </>
+            ) : (
+              <>
+                <div className="vote-row highlight">
                   <span>Scelta del Dittatore</span>
                   <strong>{resolution.dictatorChoiceName}</strong>
                 </div>
@@ -180,6 +200,7 @@ function RevealPanel({ room }) {
 function FinalResults({ room, charactersById, selfPlayer, onRestart, onLeave }) {
   const ranking = room.game.resolution?.scoreboardAfter || [];
   const leaderboard = room.leaderboard || [];
+
   return (
     <section className="final-overlay">
       <div className="final-card panel">
@@ -235,7 +256,7 @@ export default function GameScreen({
   muted,
   setMuted
 }) {
-  const playersBySeat = getSeatPositions(room.players.slice().sort((a, b) => a.seat - b.seat));
+  const playersBySeat = getSeatLayout(room.players.slice().sort((a, b) => a.seat - b.seat));
   const scoringRecipients = room.game.resolution?.pointRecipients || [];
   const dictator = room.players.find((player) => player.id === room.game.dictatorPlayerId);
   const revealTarget = room.game.resolution?.dictatorChoice || null;
@@ -262,68 +283,60 @@ export default function GameScreen({
         </div>
       </header>
 
-      <section className="board-shell">
-        <aside className="panel status-column">
+      <section className="board-shell board-single">
+        <div className="table-status panel">
           <div className="panel-header">
             <div>
-              <p className="eyebrow">Fase</p>
+              <p className="eyebrow">Stato tavolo</p>
               <h3>{phaseLabel(room.game.phase)}</h3>
             </div>
-            <span>{dictator ? `Dittatore: ${dictator.displayName}` : 'Modalita Classica'}</span>
+            <span>{dictator ? `Dittatore: ${dictator.displayName}` : 'Tutti intorno al tavolo'}</span>
           </div>
           <p className="phase-copy">{phaseDescription(room, selfPlayer)}</p>
-          <div className="score-list">
-            {room.players
-              .slice()
-              .sort((a, b) => b.score - a.score || a.seat - b.seat)
-              .map((player, index) => (
-                <div className="score-row" key={player.id}>
-                  <span>#{index + 1} {player.displayName}</span>
-                  <strong>{player.score}</strong>
-                </div>
-              ))}
+          <div className="table-status-grid">
+            <div className="status-box">
+              <span>Giocatori attivi</span>
+              <strong>{room.players.filter((player) => player.connected).length}</strong>
+            </div>
+            <div className="status-box">
+              <span>Voti ricevuti</span>
+              <strong>{room.game.submittedVoteCount}/{room.game.requiredVoteCount}</strong>
+            </div>
+            <div className="status-box">
+              <span>Prompt</span>
+              <strong>Al centro del tavolo</strong>
+            </div>
           </div>
-        </aside>
+        </div>
 
         <section className="table-panel panel">
           <div className="table-surface">
-            <div className={`prompt-spot prompt-${room.game.phase}`}>
-              <div className="prompt-card-main">
+            <div className="table-rail" />
+            <div className="table-felt" />
+
+            <div className="prompt-spot">
+              <div className={`prompt-card-main prompt-${room.game.phase}`}>
                 <div className="prompt-badge">{phaseLabel(room.game.phase)}</div>
                 <h2>{room.game.prompt}</h2>
                 <p>
                   {room.game.phase === 'reading_time'
-                    ? 'Leggete la carta prima che parta il voto.'
+                    ? 'Leggete la carta al centro prima che appaia l area di voto qui sotto.'
                     : room.game.phase === 'voting'
-                      ? 'Il server raccoglie i voti in tempo reale.'
+                      ? 'Le scelte di voto sono sotto il tavolo. Il server aggiorna tutti i dispositivi in tempo reale.'
                       : room.game.phase === 'reveal'
-                        ? 'Le scelte del round sono state svelate.'
+                        ? 'I voti vengono mostrati mantenendo la carta al centro del tavolo.'
                         : room.game.phase === 'scoring'
-                          ? 'Punti assegnati. Preparati al prossimo giro.'
-                          : 'Nuova domanda in arrivo.'}
+                          ? 'Il tavolo assegna i punti in base al risultato del round.'
+                          : 'Nuova mano in apertura.'}
                 </p>
               </div>
             </div>
 
-            <div className="player-orbit desktop-only">
+            <div className="player-orbit">
               {playersBySeat.map((player) => (
                 <PlayerSeat
                   key={player.id}
                   player={player}
-                  character={charactersById[player.characterId]}
-                  isSelf={player.id === selfPlayer.id}
-                  isDictator={player.id === room.game.dictatorPlayerId}
-                  isWinner={scoringRecipients.includes(player.id)}
-                  isRevealedTarget={revealTarget === player.id}
-                />
-              ))}
-            </div>
-
-            <div className="player-strip mobile-only">
-              {playersBySeat.map((player) => (
-                <PlayerSeat
-                  key={player.id}
-                  player={{ ...player, orbitStyle: undefined }}
                   character={charactersById[player.characterId]}
                   isSelf={player.id === selfPlayer.id}
                   isDictator={player.id === room.game.dictatorPlayerId}
@@ -339,7 +352,6 @@ export default function GameScreen({
       {room.game.phase === 'voting' ? (
         <VoteTray
           room={room}
-          selfPlayer={selfPlayer}
           charactersById={charactersById}
           onVote={onVote}
         />

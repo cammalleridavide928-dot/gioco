@@ -494,16 +494,22 @@ export class RoomManager {
 
   buildClassicResolution(room) {
     const voteTotals = summarizeVotes(room.game.votes);
-    const winners = getTopTargets(voteTotals);
+    const topTargetIds = getTopTargets(voteTotals);
+    const pointRecipients = Object.entries(room.game.votes)
+      .filter(([, targetId]) => topTargetIds.includes(targetId))
+      .map(([voterId]) => voterId);
     return {
       type: 'classic',
       votes: this.expandVoteDetails(room),
       voteTotals,
-      pointRecipients: winners,
-      summary: winners.length
-        ? `${winners.map((playerId) => this.getPlayerName(room, playerId)).join(' e ')} prendono 1 punto.`
+      topTargetIds,
+      pointRecipients,
+      summary: pointRecipients.length
+        ? `${pointRecipients.map((playerId) => this.getPlayerName(room, playerId)).join(' e ')} segnano per aver votato il gruppo in testa.`
         : 'Nessun voto valido in questo round.',
-      title: 'Voti rivelati',
+      title: topTargetIds.length
+        ? `Il gruppo in testa punta su ${topTargetIds.map((playerId) => this.getPlayerName(room, playerId)).join(' e ')}.`
+        : 'Voti rivelati',
       scoreboardBefore: this.buildRanking(room)
     };
   }

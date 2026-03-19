@@ -15,7 +15,7 @@ Spotlight Suspects is a local-first real-time party card game for the browser. O
 - 14 generated placeholder character cards as editable SVG assets
 - Fairytale / fantasy SVG character cards with stable IDs and replaceable asset paths
 - 64 editable prompt cards in JSON, now localized in Italian
-- Responsive React + Vite interface with card animations and optional procedural sounds
+- Responsive React + Vite interface with a poker-table board that adapts across desktop, tablet, and phone
 - Unique character cards per room, enforced server-side
 - Render-ready single-service deployment, with Express serving the built client in production
 
@@ -106,7 +106,7 @@ Health checks are available at `/health` and `/api/health`.
 - Players cannot vote for themselves.
 - Voting lasts at most 30 seconds.
 - If everyone votes early, the server ends voting immediately.
-- The server reveals all votes, then awards 1 point to every player tied for the highest vote count.
+- The server reveals all votes, identifies the target group with the highest vote count, and awards 1 point to every voter who chose one of those top-voted targets.
 - The game ends after the configured number of rounds.
 
 ### Dictator Mode
@@ -126,6 +126,13 @@ Health checks are available at `/health` and `/api/health`.
 ## Rules Modal
 
 The client includes an in-game rules modal in Italian that mirrors the scoring rules above, the 15-second reading phase, the 30-second voting phase, and the 3-player minimum / 14-player maximum.
+
+## In-Game Layout
+
+- The prompt card stays in the center of a poker-style table visual
+- Player cards are distributed around the table perimeter based on seat order and player count
+- Voting controls appear below the table during the voting phase
+- The board remains responsive across desktop, tablet, and mobile, keeping the table-centric feel
 
 ## Customizing Characters
 
